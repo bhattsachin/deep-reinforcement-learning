@@ -87,6 +87,27 @@ class Agent():
 
         ## TODO: compute and minimize the loss
         "*** YOUR CODE HERE ***"
+        # what does dones mean? - usage
+        # use target network 
+        # what is detach doing? and unsqueeze.
+        # what are the other values in max function - is max returning sorted array
+        Q_t_plus_1 = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
+        Q_t = gamma*Q_t_plus_1*(1-dones) + rewards
+
+        # expected Q value will come from local network
+        # what if we don't use greedy policy
+        # how about random local
+        Q_e = self.qnetwork_local(states).gather(1, actions)
+
+        # algorithm learns the Q function using DNN
+
+        # error = Q_t - Q_e
+        error = F.mse_loss(Q_t, Q_e)
+        self.optimizer.zero_grad()
+        error.backward()
+        self.optimizer.step()
+        
+
 
         # ------------------- update target network ------------------- #
         self.soft_update(self.qnetwork_local, self.qnetwork_target, TAU)                     

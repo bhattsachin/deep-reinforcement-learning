@@ -1,6 +1,8 @@
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from collections import OrderedDict
 
 class QNetwork(nn.Module):
     """Actor (Policy) Model."""
@@ -16,7 +18,24 @@ class QNetwork(nn.Module):
         super(QNetwork, self).__init__()
         self.seed = torch.manual_seed(seed)
         "*** YOUR CODE HERE ***"
+        
+        input_size = state_size
+        output_size = action_size
+        hidden_size = [128, 64]
+
+        self.fc1 = nn.Linear(input_size, hidden_size[0])
+        self.fc2 = nn.Linear(hidden_size[0], hidden_size[1])
+        self.logits = nn.Linear(hidden_size[1], output_size)
+        
+        
 
     def forward(self, state):
         """Build a network that maps state -> action values."""
-        pass
+        x = self.fc1(state)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.logits(x)
+        return x
+        
+        
