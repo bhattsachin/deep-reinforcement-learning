@@ -1,6 +1,7 @@
 from event import Event
 from past import Past
-
+from collections import deque
+import random
 class Brain:
     """Class imitating memory function of brain"""
 
