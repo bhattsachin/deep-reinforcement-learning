@@ -19,12 +19,13 @@ class QNetwork(nn.Module):
         self.seed = torch.manual_seed(seed)
         input_size = state_size
         output_size = action_size
-        hidden_size = [256, 128, 64]
+        hidden_size = [256, 128, 64, 32]
 
         self.fc1 = nn.Linear(input_size, hidden_size[0])
         self.fc2 = nn.Linear(hidden_size[0], hidden_size[1])
         self.fc3 = nn.Linear(hidden_size[1], hidden_size[2])
-        self.logits = nn.Linear(hidden_size[2], output_size)
+        self.fc4 = nn.Linear(hidden_size[2], hidden_size[3])
+        self.logits = nn.Linear(hidden_size[3], output_size)
         
         
 
@@ -34,6 +35,8 @@ class QNetwork(nn.Module):
         x = self.fc2(x)
         x = F.relu(x)
         x = self.fc3(x)
+        x = F.relu(x)
+        x = self.fc4(x)
         x = F.relu(x)
         x = self.logits(x)
         return x

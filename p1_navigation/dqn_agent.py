@@ -9,11 +9,11 @@ import numpy as np
 import logging
 
 RECALL_BUFFER_SIZE = int(1e6)
-BATCH_SIZE = 128 # minibatch
-GAMMA = 0.99 # discount
+BATCH_SIZE = 256 # minibatch
+GAMMA = 0.98 # discount
 TAU = 1e-3
-LR = 5e-4
-HOURS_DAILY = 5 # pace of the environment
+LR = 1e-4
+HOURS_DAILY = 4 # pace of the environment
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 logger = logging.getLogger('bananagent')
