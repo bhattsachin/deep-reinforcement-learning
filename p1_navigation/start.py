@@ -11,8 +11,10 @@ logger = logging.getLogger('bananagent')
 log_handler = logging.FileHandler('banana.log')
 logger.addHandler(log_handler)
 
+#eps_decay 0.997 - score 16 after 1080 episodes
+#eps_decay 0.996 - score 13.72 @ 690 / decay 0.060
 
-def dqn(env, agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.999):
+def dqn(env, agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.996):
     """ DQN """
     brain_name = env.brain_names[0]
 
