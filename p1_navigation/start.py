@@ -13,8 +13,10 @@ logger.addHandler(log_handler)
 
 #eps_decay 0.997 - score 16 after 1080 episodes
 #eps_decay 0.996 - score 13.72 @ 690 / decay 0.060
+#eps_start 0.8 - score 13 @ 740 episodes
+#eps_start 1.0
 
-def dqn(env, agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.996):
+def dqn(env, agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, eps_decay=0.994):
     """ DQN """
     brain_name = env.brain_names[0]
 
@@ -45,9 +47,9 @@ def dqn(env, agent, n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01, ep
         scores.append(score)
         eps = max(eps_end, eps_decay*eps)
         
-        if i%10 == 0:
+        if i%100 == 0:
             print('\rEpisode {}\tAverage Score: {:.2f}\tdecay:{:.3f}'.format(i, np.mean(scores_window), eps))
-        if np.mean(scores_window)>=18.0:
+        if np.mean(scores_window)>=13.0:
             print('\rEnvironment solved in {:d} episodes'.format(i))
             torch.save(agent.network_local.state_dict(), 'checkpoint.pth')
             break

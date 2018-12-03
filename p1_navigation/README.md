@@ -1,12 +1,12 @@
 [//]: # (Image References)
 
-[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif "Trained Agent"
+![image1](results/env.jpg)  "Trained Agent"
 
 # Project 1: Navigation
 
 ### Introduction
 
-For this project, you will train an agent to navigate (and collect bananas!) in a large, square world.  
+For this project, we will train an agent to navigate (and collect bananas!) in a large, discrete world.  
 
 ![Trained Agent][image1]
 
@@ -18,7 +18,8 @@ The state space has 37 dimensions and contains the agent's velocity, along with 
 - **`2`** - turn left.
 - **`3`** - turn right.
 
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+
+The task is episodic, and in order to solve the environment, agent must get an average score of +13 over 100 consecutive episodes.
 
 ### Getting Started
 
@@ -32,13 +33,41 @@ The task is episodic, and in order to solve the environment, your agent must get
 
     (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
 
-2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
+2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. To be done in local only. 
 
 ### Instructions
 
-Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  
+Follow the instructions in `Navigation.ipynb` to see the implementation. 
 
-### (Optional) Challenge: Learning from Pixels
+### Artifacts
+To create a gif of the agent, use can screen recorder to capture unity environment output into mp4.
+
+Use ffmpeg to convert mp4 to sequence of images
+```shell
+ffmpeg -i navigation -r 1 'gif/frame-%03d.jpg'
+```
+where r is frame rate
+
+Use convert to combine images into gif
+```shell
+convert -delay 20 -loop 0 *.jpg navigation.gif
+```
+
+### Errors
+Some errors were encountered when the environment is restarted. 
+```
+Preloaded 'ScreenSelector.so'
+Preloaded 'libgrpc_csharp_ext.x64.so'
+Unable to preload the following plugins:
+	ScreenSelector.so
+	libgrpc_csharp_ext.x86.so
+
+```
+
+Restart the kernel and run the following cells.
+
+
+### Challenge: Learning from Pixels (Not accepted yet)
 
 After you have successfully completed the project, if you're looking for an additional challenge, you have come to the right place!  In the project, your agent learned from information such as its velocity, along with ray-based perception of objects around its forward direction.  A more challenging task would be to learn directly from pixels!
 
