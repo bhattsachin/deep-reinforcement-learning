@@ -15,7 +15,7 @@ class Agent:
         self.Q = defaultdict(lambda: np.zeros(self.nA))
         self.alpha = 0.1
         self.gamma = 1.0
-        self.decay = 0.999999
+        self.steps = 0
         self.epsilon = 1 
 
     def select_action(self, state):
@@ -45,7 +45,8 @@ class Agent:
         - next_state: the current state of the environment
         - done: whether the episode is complete (True or False)
         """
-        self.epsilon = self.epsilon*self.decay 
+        self.steps +=1
+        self.epsilon = 1/self.steps
         w = self.weights(self.Q[next_state]) 
         x = self.Q[next_state]
         self.Q[state][action] += self.alpha*(reward + self.gamma*np.dot(x, w) - self.Q[state][action]) 
