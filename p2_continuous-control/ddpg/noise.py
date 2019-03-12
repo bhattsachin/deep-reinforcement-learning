@@ -12,7 +12,7 @@ class OUNoise:
     def reset(self):
         self.state = np.ones(self.dimension) * self.mu
 
-    def noise(self):
+    def make(self):
         x = self.state
         dx = self.theta * (self.mu - x) + np.random.randn(len(x))       
         self.state = x + dx
@@ -22,7 +22,7 @@ class OUNoise:
 
 if __name__ == '__main__':
     noise = OUNoise(4)
-    print(noise.noise())
+    print(noise.make())
     
 
 
