@@ -18,16 +18,20 @@ class Actor(nn.Module):
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(n_state, h1)
         self.fc2 = nn.Linear(h1, h2)
+        self.fc3 = nn.Linear(h2, n_action)
         self.flush_weights()
 
     def flush_weights(self):
         self.fc1.weight.data.uniform_(-1e4, 1e4)
         self.fc2.weight.data.uniform_(-1e4, 1e4)
+        self.fc3.weight.data.uniform_(-1e4, 1e4)
 
     def forward(self, state):
         x = self.fc1(state)
         x = nn.functional.relu(x)
         x = self.fc2(x)
+        x = nn.functional.relu(x)
+        x = self.fc3(x)
         x = nn.functional.tanh(x)
         return x
 

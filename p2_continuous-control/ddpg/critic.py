@@ -8,13 +8,14 @@ class Critic(nn.Module):
 
     How does ratio of h1 : n_action 
     effect overall.
+    Q - Why critic.h1 == actor.h1
     """
 
     def __init__(self,
                 seed,
                 n_state,
                 n_action,
-                h1=256,
+                h1=128,
                 h2=128,
                 h3=64):
         super(Critic, self).__init__()
@@ -36,10 +37,10 @@ class Critic(nn.Module):
     def forward(self, state, action):
         x_state = self.fc1(state)
         x_state = nn.functional.relu(x_state)
-        x = torch.cat(x_state + action) 
-        x = nn.functional.relu(x)
+        x = torch.cat((x_state, action), dim=1) 
         x = self.fc2(x)
         x = nn.functional.relu(x)
         x = self.fc3(x)
         x = nn.functional.relu(x)
         x = self.fc4(x)
+        return x

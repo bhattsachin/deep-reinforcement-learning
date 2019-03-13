@@ -9,7 +9,7 @@ def run():
                     n_state = env.observation_space.shape[0],
                     n_action = env.action_space.shape[0])
 
-    episodes_n = 1
+    episodes_n = 3 
     steps_max = 500 
     scores = []
     for i_episodes in range(1, episodes_n):

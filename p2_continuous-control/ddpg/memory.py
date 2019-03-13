@@ -4,6 +4,15 @@ from collections import deque
 import torch
 import numpy as np
 
+class SARSD:
+    def __init__(self, states, actions, rewards, states_next, dones):
+        self.states = states
+        self.actions = actions
+        self.rewards = rewards
+        self.states_next = states_next
+        self.dones = dones
+    
+
 class Memory:
     def __init__(self, buffer_size, device):
         self.buffer = deque(maxlen=buffer_size)
@@ -15,7 +24,7 @@ class Memory:
     def sample(self, N):
         #only if N<len(self.buffer)
         if N < len(self.buffer):
-            return random.sample(self.buffer, N)
+            return random.sample(self.buffer, k=N)
         return None
 
     def deserialize(self, events):
@@ -24,7 +33,7 @@ class Memory:
         rewards = self.sq('reward', events)
         states_next = self.sq('state_next', events)
         dones = self.sq('done', events)
-        return (states, actions, rewards, states_next, dones) 
+        return SARSD(states, actions, rewards, states_next, dones) 
     
     def sq(self, property, obj):
         if property is not 'done':

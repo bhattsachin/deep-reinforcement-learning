@@ -9,7 +9,8 @@ import torch
 from collections import deque
 import numpy as np
 
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+#device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cpu' if torch.cuda.is_available() else 'cpu')
 class DDPGAgent:
     def __init__(self,
                 seed,
@@ -37,6 +38,7 @@ class DDPGAgent:
         #init memory
         self.memory = memory(int(buffer), device)
         self.tau = tau
+        self.gamma = gamma
         self.noise = noise(n_action, seed=seed)
         
     def step(self, state, action, reward, next_state, done):
@@ -54,7 +56,7 @@ class DDPGAgent:
         return np.clip(action, -1, 1)
 
     def reset(self):
-        self.noise.reset() 
+        self.noise.reset()
 
     def learn(self):
         """
@@ -71,25 +73,25 @@ class DDPGAgent:
         self.update_target(self.local_actor, self.target_actor, self.tau)
         self.update_target(self.local_critic, self.target_critic, self.tau)
 
-    def update_critic(self, event_batch):
-        states, actions, rewards, states_next, dones = zip(event_batch)
-        print('states:{}'.format(states))
+    def update_critic(self, batch):
         ## TD step
-        actions_pred = self.target_actor(states_next)
-        critic_Q =  self.local_critic(states, actions)
-        critic_target_Q = self.target_critic(states_next, actions_pred)
+        # t
+        expected_Q =  self.local_critic(batch.states, batch.actions)
+        
+        # t+1 
+        actions_pred = self.target_actor(batch.states_next)
+        target_Q = self.target_critic(batch.states_next, actions_pred)
         #only learning from positives? negatives are good source of learning too
-        critic_target_Q = rewards + (self.gamma*critic_target_q*(1-dones))
-        loss = nn.functional.mse_loss(critic_Q, critic_target_Q)
+        target_Q = batch.rewards + (self.gamma * target_Q * (1 - batch.dones))
+        loss = nn.functional.mse_loss(expected_Q, target_Q)
 
         self.optim_critic.zero_grad()
         loss.backward()
         self.optim_critic.step()
 
-    def update_actor(self, event_batch):
-        states, actions, rewards, states_next, dones = zip(event_batch) 
-        actions_predicted = self.local_actor(states)#fixthis
-        loss = -self.local_critic(states, actions_predicted).mean() #rms
+    def update_actor(self, batch):
+        actions_predicted = self.local_actor(batch.states)#fixthis
+        loss = -self.local_critic(batch.states, actions_predicted).mean() #rms
 
         self.optim_actor.zero_grad()
         loss.backward()
@@ -97,7 +99,7 @@ class DDPGAgent:
 
     def update_target(self, local, target, tau):
         for target_param, local_param in zip(target.parameters(), local.parameters()):
-            target.data.copy_(tau*local_param + (1.0-tau)*target.data)
+            target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
 
 
 if __name__ == '__main__':
