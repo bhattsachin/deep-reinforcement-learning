@@ -9,20 +9,20 @@ import torch
 from collections import deque
 import numpy as np
 
-#device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 device = torch.device('cpu' if torch.cuda.is_available() else 'cpu')
+#device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 class DDPGAgent:
     def __init__(self,
                 seed,
                 n_state,
                 n_action,
-                batch_size=64,
+                batch_size=128,
                 buffer=1e6,
                 gamma=0.9,
                 lr_actor=1e-3,
                 lr_critic=1e-3,
                 weight_decay=1e-3,
-                tau=1e-3
+                tau=0.5
                 ):
         self.batch_size = batch_size
 
@@ -33,7 +33,7 @@ class DDPGAgent:
         #init critic
         self.local_critic = Critic(seed, n_state, n_action)
         self.target_critic = Critic(seed, n_state, n_action)
-        self.optim_critic = torch.optim.Adam(self.local_critic.parameters(), lr=lr_critic)
+        self.optim_critic = torch.optim.Adam(self.local_critic.parameters(), lr=lr_critic, weight_decay=weight_decay)
 
         #init memory
         self.memory = memory(int(buffer), device)
@@ -52,6 +52,8 @@ class DDPGAgent:
         with torch.no_grad():
             action = self.local_actor(state).cpu().data.numpy()
         self.local_actor.train()
+
+        action += self.noise.make()
 
         return np.clip(action, -1, 1)
 
@@ -97,9 +99,9 @@ class DDPGAgent:
         loss.backward()
         self.optim_actor.step()
 
-    def update_target(self, local, target, tau):
+    def update_target(self, local, target):
         for target_param, local_param in zip(target.parameters(), local.parameters()):
-            target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
+            target_param.data.copy_(self.tau * local_param.data + (1.0 - self.tau) * target_param.data)
 
 
 if __name__ == '__main__':
