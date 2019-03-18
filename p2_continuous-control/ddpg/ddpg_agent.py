@@ -9,20 +9,20 @@ import torch
 from collections import deque
 import numpy as np
 
-device = torch.device('cpu' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 #device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-class DDPGAgent:
+class DDPGAgent():
     def __init__(self,
                 seed,
                 n_state,
                 n_action,
                 batch_size=128,
-                buffer=1e6,
-                gamma=0.9,
-                lr_actor=1e-3,
+                buffer=1e5,
+                gamma=0.99,
+                lr_actor=1e-4,
                 lr_critic=1e-3,
-                weight_decay=1e-3,
-                tau=0.5
+                weight_decay=0,
+                tau=1e-3
                 ):
         self.batch_size = batch_size
 
@@ -31,12 +31,12 @@ class DDPGAgent:
         self.target_actor = Actor(seed, n_state, n_action).to(device)
         self.optim_actor = torch.optim.Adam(self.local_actor.parameters(), lr=lr_actor)  
         #init critic
-        self.local_critic = Critic(seed, n_state, n_action)
-        self.target_critic = Critic(seed, n_state, n_action)
+        self.local_critic = Critic(seed, n_state, n_action).to(device)
+        self.target_critic = Critic(seed, n_state, n_action).to(device)
         self.optim_critic = torch.optim.Adam(self.local_critic.parameters(), lr=lr_critic, weight_decay=weight_decay)
 
         #init memory
-        self.memory = memory(int(buffer), device)
+        self.memory = memory(int(buffer), device, seed)
         self.tau = tau
         self.gamma = gamma
         self.noise = noise(n_action, seed=seed)
@@ -72,8 +72,8 @@ class DDPGAgent:
         event_batch = self.memory.deserialize(event_batch)
         self.update_critic(event_batch)
         self.update_actor(event_batch)
-        self.update_target(self.local_actor, self.target_actor, self.tau)
-        self.update_target(self.local_critic, self.target_critic, self.tau)
+        self.update_target(self.local_actor, self.target_actor)
+        self.update_target(self.local_critic, self.target_critic)
 
     def update_critic(self, batch):
         ## TD step
@@ -82,9 +82,9 @@ class DDPGAgent:
         
         # t+1 
         actions_pred = self.target_actor(batch.states_next)
-        target_Q = self.target_critic(batch.states_next, actions_pred)
+        target_Q_next = self.target_critic(batch.states_next, actions_pred)
         #only learning from positives? negatives are good source of learning too
-        target_Q = batch.rewards + (self.gamma * target_Q * (1 - batch.dones))
+        target_Q = batch.rewards + (self.gamma * target_Q_next * (1 - batch.dones))
         loss = nn.functional.mse_loss(expected_Q, target_Q)
 
         self.optim_critic.zero_grad()

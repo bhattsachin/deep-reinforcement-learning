@@ -14,9 +14,10 @@ class SARSD:
     
 
 class Memory:
-    def __init__(self, buffer_size, device):
+    def __init__(self, buffer_size, device, seed):
         self.buffer = deque(maxlen=buffer_size)
         self.device = device
+        self.seed = random.seed(seed)
 
     def add(self, event):
         self.buffer.append(event)

@@ -1,13 +1,14 @@
 import numpy as np
+import random
 
 class OUNoise:
-    def __init__(self, dimension, mu=0, theta=0.1, sigma=0.1, seed=30):
+    def __init__(self, dimension, mu=0, theta=0.15, sigma=0.2, seed=30):
         self.dimension = dimension
         self.mu = mu
         self.theta = theta
         self.sigma = sigma
         self.state = np.ones(self.dimension) * self.mu 
-        np.random.seed(seed)
+        self.seed = np.random.seed(seed)
 
     def reset(self):
         self.state = np.ones(self.dimension) * self.mu

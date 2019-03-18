@@ -1,19 +1,32 @@
 import gym
 from ddpg_agent import DDPGAgent
+from udacity_agent import Agent
 import numpy as np
+from collections import deque
 
 def run():
     env = gym.make('Pendulum-v0')
     seed = 30 
     env.seed(seed)
+
+    ''' 
     agent = DDPGAgent(seed=seed,
                     n_state = env.observation_space.shape[0],
                     n_action = env.action_space.shape[0])
-
+    
+    ''' 
+    agent = Agent(state_size=env.observation_space.shape[0], 
+                  action_size=env.action_space.shape[0], random_seed=seed)
+    
+     
     episodes_n = 1000
-    steps_max = 1000 
+    steps_max = 300 
     scores = []
-    for i_episodes in range(1, episodes_n):
+    print_every = 100
+    
+    scores_deque = deque(maxlen=print_every)
+
+    for i_episode in range(1, episodes_n):
         state = env.reset()
         agent.reset()
         score = 0
@@ -28,9 +41,18 @@ def run():
             if done:
                 break
         scores.append(score)
-        print('\rEpisode {} - \t{}\tAverage Score: {:.2f}\tScore: {:.2f}'.format(
-            i_episodes, done_step, np.mean(scores), score), end="")
-    #print('scores: {}'.format(scores))
+        scores_deque.append(score)
+
+        print_line(i_episode, scores_deque, end="")
+        if i_episode % print_every == 0:
+            print_line(i_episode, scores_deque, end="\n")
+
+
+       
+    return scores
+
+def print_line(i_episode, scores_deque, end=""):
+    print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_deque)), end=end)
 
     
 if __name__ == '__main__':

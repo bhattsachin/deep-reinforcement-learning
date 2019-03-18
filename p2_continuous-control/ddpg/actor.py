@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+import util
 
 class Actor(nn.Module):
     """
@@ -12,8 +13,8 @@ class Actor(nn.Module):
                 seed, 
                 n_state, 
                 n_action, 
-                h1=128,
-                h2=128):
+                h1=400,
+                h2=300):
         super(Actor, self).__init__() 
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(n_state, h1)
@@ -22,9 +23,9 @@ class Actor(nn.Module):
         self.flush_weights()
 
     def flush_weights(self):
-        self.fc1.weight.data.uniform_(-1e4, 1e4)
-        self.fc2.weight.data.uniform_(-1e4, 1e4)
-        self.fc3.weight.data.uniform_(-1e4, 1e4)
+        self.fc1.weight.data.uniform_(*util.hidden_init(self.fc1))
+        self.fc2.weight.data.uniform_(*util.hidden_init(self.fc2))
+        self.fc3.weight.data.uniform_(-3e-3, 3e-3)
 
     def forward(self, state):
         x = self.fc1(state)
