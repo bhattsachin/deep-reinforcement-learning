@@ -13,9 +13,9 @@ class Critic(nn.Module):
     """
 
     def __init__(self,
-                seed,
                 n_state,
                 n_action,
+                seed,
                 h1=400,
                 h2=300,
                 h3=200):

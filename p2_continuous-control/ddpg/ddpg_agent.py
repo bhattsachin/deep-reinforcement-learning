@@ -27,12 +27,12 @@ class DDPGAgent():
         self.batch_size = batch_size
 
         #init actor
-        self.local_actor = Actor(seed,n_state, n_action).to(device)
-        self.target_actor = Actor(seed, n_state, n_action).to(device)
+        self.local_actor = Actor(n_state, n_action, seed).to(device)
+        self.target_actor = Actor(n_state, n_action, seed).to(device)
         self.optim_actor = torch.optim.Adam(self.local_actor.parameters(), lr=lr_actor)  
         #init critic
-        self.local_critic = Critic(seed, n_state, n_action).to(device)
-        self.target_critic = Critic(seed, n_state, n_action).to(device)
+        self.local_critic = Critic(n_state, n_action, seed).to(device)
+        self.target_critic = Critic(n_state, n_action, seed).to(device)
         self.optim_critic = torch.optim.Adam(self.local_critic.parameters(), lr=lr_critic, weight_decay=weight_decay)
 
         #init memory

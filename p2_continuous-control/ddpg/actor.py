@@ -10,9 +10,9 @@ class Actor(nn.Module):
 
     """
     def __init__(self, 
-                seed, 
                 n_state, 
-                n_action, 
+                n_action,
+                seed, 
                 h1=400,
                 h2=300):
         super(Actor, self).__init__() 

@@ -9,7 +9,7 @@ def run():
     seed = 30 
     env.seed(seed)
 
-    ''' 
+    
     agent = DDPGAgent(seed=seed,
                     n_state = env.observation_space.shape[0],
                     n_action = env.action_space.shape[0])
@@ -17,7 +17,7 @@ def run():
     ''' 
     agent = Agent(state_size=env.observation_space.shape[0], 
                   action_size=env.action_space.shape[0], random_seed=seed)
-    
+    ''' 
      
     episodes_n = 1000
     steps_max = 300 
