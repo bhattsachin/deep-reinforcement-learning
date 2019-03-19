@@ -15,7 +15,7 @@ class OUNoise:
 
     def make(self):
         x = self.state
-        dx = self.theta * (self.mu - x) + np.array(random.random() for i in range(len(self.state)))       
+        dx = self.theta * (self.mu - x) + np.array([random.random() for i in range(len(self.state))])       
         self.state = x + dx
         return self.state
 
