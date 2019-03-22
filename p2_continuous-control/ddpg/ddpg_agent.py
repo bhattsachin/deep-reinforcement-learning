@@ -16,7 +16,7 @@ class DDPGAgent():
                 seed,
                 n_state,
                 n_action,
-                batch_size=128,
+                batch_size=64,
                 buffer=1e5,
                 gamma=0.99,
                 lr_actor=1e-4,

@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class OUNoise:
-    def __init__(self, dimension, mu=0, theta=0.15, sigma=0.2, seed=30):
+    def __init__(self, dimension, mu=0, theta=0.30, sigma=0.1, seed=30):
         self.dimension = dimension
         self.mu = mu
         self.theta = theta

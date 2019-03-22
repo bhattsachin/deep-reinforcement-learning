@@ -19,7 +19,7 @@ def run():
                   action_size=env.action_space.shape[0], random_seed=seed)
     ''' 
      
-    episodes_n = 1000
+    episodes_n = 2000
     steps_max = 300 
     scores = []
     print_every = 100

@@ -1,0 +1,160 @@
+## 1
+
+ def __init__(self,
+                seed,
+                n_state,
+                n_action,
+                batch_size=128,
+                buffer=1e5,
+                gamma=0.99,
+                lr_actor=1e-4,
+                lr_critic=1e-3,
+                weight_decay=0,
+                tau=1e-3
+                ):
+
+Episode 100     Average Score: -1185.31
+Episode 200	Average Score: -978.855
+Episode 300	Average Score: -1002.10
+Episode 400	Average Score: -928.292
+Episode 500	Average Score: -941.15
+Episode 600	Average Score: -890.76
+Episode 700	Average Score: -596.01
+Episode 800	Average Score: -404.20
+Episode 900	Average Score: -448.48
+Episode 1000    Average Score: -682.50
+Episode 1100	Average Score: -736.46
+Episode 1200	Average Score: -683.95
+Episode 1300	Average Score: -741.07
+Episode 1400	Average Score: -719.03
+
+
+## 2
+
+Objective: effect of gamma
+
+def __init__(self,
+                seed,
+                n_state,
+                n_action,
+                batch_size=64,
+                buffer=1e5,
+                gamma=0.9,
+                lr_actor=1e-4,
+                lr_critic=1e-3,
+                weight_decay=0,
+                tau=1e-3
+                ):
+
+Episode 100     Average Score: -1260.55
+Episode 200	Average Score: -1082.91
+Episode 300	Average Score: -968.539
+Episode 400	Average Score: -942.70
+Episode 500	Average Score: -945.54
+Episode 600	Average Score: -895.76
+
+Observation: Learning is slower when gamma is reduced.
+
+
+## 3
+
+Objective: effect of batch_size
+
+
+batch_size=32
+
+Episode 100     Average Score: -1245.88
+Episode 200	Average Score: -1144.89
+Episode 300	Average Score: -1089.69
+Episode 400	Average Score: -1002.99
+Episode 500	Average Score: -941.770
+Episode 600	Average Score: -1011.23
+Episode 699	Average Score: -807.64$>
+
+flucutating more?
+
+batch_size=256
+
+Episode 100     Average Score: -1203.52
+Episode 200	Average Score: -870.147
+Episode 300	Average Score: -892.44
+Episode 400	Average Score: -981.062
+Episode 500	Average Score: -984.010
+Episode 600	Average Score: -965.72
+Episode 699	Average Score: -907.39$>
+
+batch_size=128
+
+Episode 100     Average Score: -1217.63
+Episode 200	Average Score: -1076.69
+Episode 300	Average Score: -1042.06
+Episode 400	Average Score: -972.766
+Episode 500	Average Score: -908.54
+Episode 600	Average Score: -823.64
+
+
+## 4
+
+Objective: effect of noise
+
+ def __init__(self, dimension, mu=0, theta=0.15, sigma=0.1, seed=30):
+
+ Episode 100     Average Score: -1246.32
+Episode 200	Average Score: -1025.13
+Episode 300	Average Score: -805.867
+Episode 400	Average Score: -731.44
+Episode 500	Average Score: -672.77
+Episode 600	Average Score: -701.02
+Episode 699	Average Score: -572.62
+
+less variation was certainly better. What if we can taper down during later stages.
+
+
+
+Episode 100 Average Score: -1246.32
+Episode 200	Average Score: -1025.13
+Episode 300	Average Score: -805.867
+Episode 400	Average Score: -731.44
+Episode 500	Average Score: -672.77
+Episode 600	Average Score: -701.02
+
+ def __init__(self, dimension, mu=0, theta=0.30, sigma=0.1, seed=30):
+
+ Episode 100     Average Score: -1259.24
+Episode 200	Average Score: -1055.38
+Episode 300	Average Score: -928.278
+Episode 400	Average Score: -822.94
+Episode 500	Average Score: -714.72
+Episode 600	Average Score: -727.53
+Episode 699	Average Score: -561.77
+
+
+## long runs
+
+episodes_n = 5000
+steps_max = 300 
+
+Episode 100     Average Score: -1160.14
+Episode 200	Average Score: -664.746
+Episode 300	Average Score: -463.61
+Episode 400	Average Score: -353.25
+Episode 500	Average Score: -312.67
+Episode 600	Average Score: -327.97
+Episode 700	Average Score: -301.19
+Episode 800	Average Score: -271.44
+Episode 900	Average Score: -258.68
+Episode 1000    Average Score: -274.29
+Episode 1100	Average Score: -302.23
+Episode 1200	Average Score: -258.46
+Episode 1300	Average Score: -298.51
+Episode 1400	Average Score: -285.62
+Episode 1500	Average Score: -245.30
+Episode 1600	Average Score: -272.79
+Episode 1700	Average Score: -278.95
+Episode 1800	Average Score: -288.96
+Episode 1900	Average Score: -327.77
+Episode 2000	Average Score: -282.95
+Episode 2100	Average Score: -313.17
+
+
+
